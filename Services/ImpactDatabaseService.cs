@@ -536,7 +536,7 @@ namespace ImpactApi.Services
         public async Task<List<Constellation>> GetConstellations(string characterId)
         {
             List<Constellation> constellations = new List<Constellation>();
-            string command = "SELECT * FROM ImpactDB.ConstellationTable WHERE (character_id = @character_id)";
+            string command = "SELECT * FROM ImpactDB.ConstellationTable ORDER BY ConstellationTable.order ASC WHERE (character_id = @character_id)";
 
             using (MySqlConnection sqlConnection = new MySqlConnection(_connectionString))
             {
@@ -675,7 +675,7 @@ namespace ImpactApi.Services
         public async Task<List<ArtifactPriority>> GetArtifactPriorities(string characterId, bool details)
         {
             List<ArtifactPriority> artifactPriorities = new List<ArtifactPriority>();
-            string command = "SELECT * FROM ImpactDB.ArtifactPriorityTable WHERE character_id = @character_id";
+            string command = "SELECT * FROM ImpactDB.ArtifactPriorityTable ORDER BY ArtifactPriorityTable.rank ASC WHERE character_id = @character_id";
 
             using (MySqlConnection sqlConnection = new MySqlConnection(_connectionString))
             {
@@ -716,7 +716,7 @@ namespace ImpactApi.Services
         public async Task<List<WeaponPriority>> GetWeaponPriorities(string characterId, bool details)
         {
             List<WeaponPriority> weaponPriorities = new List<WeaponPriority>();
-            string command = "SELECT * FROM ImpactDB.WeaponPriorityTable WHERE character_id = @character_id";
+            string command = "SELECT * FROM ImpactDB.WeaponPriorityTable ORDER BY WeaponPriorityTable.rank ASC WHERE character_id = @character_id";
 
             using (MySqlConnection sqlConnection = new MySqlConnection(_connectionString))
             {
@@ -794,7 +794,7 @@ namespace ImpactApi.Services
         public async Task<List<SubStatPriority>> GetSubStatPriorities(string characterId)
         {
             List<SubStatPriority> subStatPriorities = new List<SubStatPriority>();
-            string command = "SELECT * FROM ImpactDB.SubStatPriorityTable WHERE character_id = @character_id";
+            string command = "SELECT * FROM ImpactDB.SubStatPriorityTable ORDER BY SubStatPriorityTable.rank ASC WHERE character_id = @character_id";
 
             using (MySqlConnection sqlConnection = new MySqlConnection(_connectionString))
             {
