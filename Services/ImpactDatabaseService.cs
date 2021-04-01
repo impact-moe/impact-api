@@ -245,9 +245,10 @@ namespace ImpactApi.Services
         #endregion
 
         #region Character Operations
-        public async Task<List<Character>> GetAllCharacters(bool talents, bool constellations, bool overview)
+        public async Task<List<Character>> GetAllCharacters(string expand)
         {
             List<Character> characters = new List<Character>();
+            string[] parameters;
             string command = "SELECT * FROM ImpactDB.CharacterTable";
 
             using (MySqlConnection sqlConnection = new MySqlConnection(_connectionString))
@@ -263,14 +264,26 @@ namespace ImpactApi.Services
                     {
                         Character character = ReadCharacter(row);
 
-                        if (talents)
-                            character.Talents = await GetTalents(character.Id);
-                        if (constellations)
-                            character.Constellations = await GetConstellations(character.Id);
-                        if (overview)
+                        if (expand != null)
                         {
-                            character.CharacterOverview = await GetCharacterOverview(character.Id);
-                            character.Roles = await GetCharacterRoles(character.Id);
+                            parameters = expand.Split(",");
+
+                            foreach (string parameter in parameters) 
+                            {
+                                switch (parameter) 
+                                {
+                                    case "talents":
+                                        character.Talents = await GetTalents(character.Id);
+                                        break;
+                                    case "constellations":
+                                        character.Constellations = await GetConstellations(character.Id);
+                                        break;
+                                    case "overview":
+                                        character.CharacterOverview = await GetCharacterOverview(character.Id);
+                                        character.Roles = await GetCharacterRoles(character.Id);
+                                        break;
+                                }
+                            }
                         }
 
                         characters.Add(character);
@@ -281,9 +294,10 @@ namespace ImpactApi.Services
             return characters;
         }
 
-        public async Task<Character> GetCharacter(string characterId, bool talents, bool constellations, bool overview)
+        public async Task<Character> GetCharacter(string characterId, string expand)
         {
             Character character;
+            string[] parameters;
             string command = "SELECT * FROM ImpactDB.CharacterTable WHERE (id = @id)";
             
             using (MySqlConnection sqlConnection = new MySqlConnection(_connectionString)) 
@@ -302,14 +316,26 @@ namespace ImpactApi.Services
                 }
             }
 
-            if (talents)
-                character.Talents = await GetTalents(characterId);
-            if (constellations)
-                character.Constellations = await GetConstellations(characterId);
-            if (overview)
+            if (expand != null)
             {
-                character.CharacterOverview = await GetCharacterOverview(characterId);
-                character.Roles = await GetCharacterRoles(characterId);
+                parameters = expand.Split(",");
+
+                foreach (string parameter in parameters) 
+                {
+                    switch (parameter) 
+                    {
+                        case "talents":
+                            character.Talents = await GetTalents(characterId);
+                            break;
+                        case "constellations":
+                            character.Constellations = await GetConstellations(characterId);
+                            break;
+                        case "overview":
+                            character.CharacterOverview = await GetCharacterOverview(characterId);
+                            character.Roles = await GetCharacterRoles(characterId);
+                            break;
+                    }
+                }
             }
 
             return character;
