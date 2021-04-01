@@ -9,11 +9,11 @@ namespace ImpactApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ArtifactController : ControllerBase
+    public class ArtifactsController : ControllerBase
     {
         ImpactDatabaseService _databaseService;
 
-        public ArtifactController(ImpactDatabaseService databaseService)
+        public ArtifactsController(ImpactDatabaseService databaseService)
         {
             this._databaseService = databaseService;
         }

@@ -9,21 +9,21 @@ namespace ImpactApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CharacterController : ControllerBase
+    public class CharactersController : ControllerBase
     {
         ImpactDatabaseService _databaseService;
 
-        public CharacterController(ImpactDatabaseService databaseService)
+        public CharactersController(ImpactDatabaseService databaseService)
         {
             this._databaseService = databaseService;
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Character>> Get(string id, bool talents, bool constellations, bool overview)
+        public async Task<ActionResult<Character>> Get(string id, string expand)
         {
             try
             {
-                Character character = await _databaseService.GetCharacter(id, talents, constellations, overview);
+                Character character = await _databaseService.GetCharacter(id, expand);
                 if (character != null)
                     return character;
                 return NotFound();
@@ -39,7 +39,7 @@ namespace ImpactApi.Controllers
         {
             try
             {
-                Character character = await _databaseService.GetCharacter(id, true, true, true);
+                Character character = await _databaseService.GetCharacter(id, "talents,constellations,overview");
                 if (character != null)
                     return character;
                 return NotFound();
@@ -162,12 +162,12 @@ namespace ImpactApi.Controllers
             }
         }
 
-        [HttpGet("all")]
-        public async Task<ActionResult<List<Character>>> GetAllCharacters(bool talents, bool constellations, bool overview)
+        [HttpGet]
+        public async Task<ActionResult<List<Character>>> GetAllCharacters(string expand)
         {
             try
             {
-                return await _databaseService.GetAllCharacters(talents, constellations, overview);
+                return await _databaseService.GetAllCharacters(expand);
             }
             catch (Exception e)
             {

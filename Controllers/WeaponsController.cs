@@ -9,11 +9,11 @@ namespace ImpactApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class WeaponController : ControllerBase
+    public class WeaponsController : ControllerBase
     {
         ImpactDatabaseService _databaseService;
 
-        public WeaponController(ImpactDatabaseService databaseService)
+        public WeaponsController(ImpactDatabaseService databaseService)
         {
             this._databaseService = databaseService;
         }
