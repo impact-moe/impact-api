@@ -32,7 +32,7 @@ namespace ImpactApi.Controllers
             }
         }
 
-        [HttpGet("all")]
+        [HttpGet]
         public async Task<ActionResult<List<Artifact>>> GetAllArtifacts()
         {
             try

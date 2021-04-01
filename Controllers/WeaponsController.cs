@@ -50,7 +50,7 @@ namespace ImpactApi.Controllers
             }
         }
 
-        [HttpGet("all")]
+        [HttpGet]
         public async Task<ActionResult<List<Weapon>>> GetAllWeapons(bool stats)
         {
             try
