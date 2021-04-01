@@ -19,7 +19,7 @@ namespace ImpactApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Character>> Get(string id, string expand)
+        public async Task<ActionResult<Character>> Get(string id, string expand = "")
         {
             try
             {
@@ -98,12 +98,28 @@ namespace ImpactApi.Controllers
             }
         }
 
-        [HttpGet("{id}/weapon-priorities")]
-        public async Task<ActionResult<List<WeaponPriority>>> GetWeaponPriorities(string id, bool details)
+        [HttpGet("{id}/roles")]
+        public async Task<ActionResult<List<Role>>> GetCharacterRoles(string id, string expand = "")
         {
             try
             {
-                List<WeaponPriority> weaponPriorities = await _databaseService.GetWeaponPriorities(id, details);
+                List<Role> roles = await _databaseService.GetCharacterRoles(id, expand);
+                if (roles != null)
+                    return roles;
+                return NotFound();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.ToString());
+            }
+        }
+
+        [HttpGet("{id}/weapon-priorities")]
+        public async Task<ActionResult<List<WeaponPriority>>> GetWeaponPriorities(string id, string expand = "")
+        {
+            try
+            {
+                List<WeaponPriority> weaponPriorities = await _databaseService.GetWeaponPriorities(id, expand);
                 if (weaponPriorities != null)
                     return weaponPriorities;
                 return NotFound();
@@ -115,11 +131,11 @@ namespace ImpactApi.Controllers
         }
 
         [HttpGet("{id}/artifact-priorities")]
-        public async Task<ActionResult<List<ArtifactPriority>>> GetArtifactPriorities(string id, bool details)
+        public async Task<ActionResult<List<ArtifactPriority>>> GetArtifactPriorities(string id, string expand = "")
         {
             try
             {
-                List<ArtifactPriority> artifactPriorities = await _databaseService.GetArtifactPriorities(id, details);
+                List<ArtifactPriority> artifactPriorities = await _databaseService.GetArtifactPriorities(id, expand);
                 if (artifactPriorities != null)
                     return artifactPriorities;
                 return NotFound();
@@ -163,7 +179,7 @@ namespace ImpactApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Character>>> GetAllCharacters(string expand)
+        public async Task<ActionResult<List<Character>>> GetAllCharacters(string expand = "")
         {
             try
             {

@@ -19,11 +19,11 @@ namespace ImpactApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Weapon>> Get(string id, bool stats)
+        public async Task<ActionResult<Weapon>> Get(string id, string expand = "")
         {
             try
             {
-                Weapon weaponObj = await _databaseService.GetWeapon(id, stats);
+                Weapon weaponObj = await _databaseService.GetWeapon(id, expand);
                 if (weaponObj != null)
                     return weaponObj;
                 return NotFound();
@@ -51,11 +51,11 @@ namespace ImpactApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Weapon>>> GetAllWeapons(bool stats)
+        public async Task<ActionResult<List<Weapon>>> GetAllWeapons(string expand = "")
         {
             try
             {
-                return await _databaseService.GetAllWeapons(stats);
+                return await _databaseService.GetAllWeapons(expand);
             }
             catch (Exception e)
             {
@@ -68,7 +68,7 @@ namespace ImpactApi.Controllers
         {
             try
             {
-                return await _databaseService.GetWeapon(id, true);
+                return await _databaseService.GetWeapon(id, "stats");
             }
             catch (Exception e)
             {

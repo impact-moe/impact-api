@@ -106,14 +106,32 @@ namespace ImpactApi.Services
         #endregion
 
         #region Role Operations
-        public async Task<List<Role>> GetCharacterRoles(string characterId)
+        public async Task<List<Role>> GetCharacterRoles(string characterId, string expand)
         {
             List<Role> roles = new List<Role>();
-
-            List<WeaponPriority> weaponPriorities = await GetWeaponPriorities(characterId, true);
-            List<ArtifactPriority> artifactPriorities = await GetArtifactPriorities(characterId, true);
+            List<WeaponPriority> weaponPriorities = await GetWeaponPriorities(characterId, string.Empty);
+            List<ArtifactPriority> artifactPriorities = await GetArtifactPriorities(characterId, string.Empty);
             List<MainStatPriority> mainStatPriorities = await GetMainStatPriorities(characterId);
             List<SubStatPriority> subStatPriorities = await GetSubStatPriorities(characterId);
+            string[] parameters;
+
+            if (expand != string.Empty)
+            {
+                parameters = expand.Split(",");
+                foreach (string parameter in parameters)
+                {
+                    parameter.ToLower();
+                    switch (parameter)
+                    {
+                        case "weapon":
+                            weaponPriorities = await GetWeaponPriorities(characterId, "weapon");
+                            break;
+                        case "artifactset":
+                            artifactPriorities = await GetArtifactPriorities(characterId, "artifactset");
+                            break;
+                    }
+                }
+            }
 
             foreach (WeaponPriority weaponPriority in weaponPriorities)
             {
@@ -262,12 +280,13 @@ namespace ImpactApi.Services
                     {
                         Character character = ReadCharacter(row);
 
-                        if (expand != null)
+                        if (expand != string.Empty)
                         {
                             parameters = expand.Split(",");
 
                             foreach (string parameter in parameters) 
                             {
+                                parameter.ToLower();
                                 switch (parameter) 
                                 {
                                     case "talents":
@@ -278,12 +297,17 @@ namespace ImpactApi.Services
                                         break;
                                     case "overview":
                                         character.CharacterOverview = await GetCharacterOverview(character.Id);
-                                        character.Roles = await GetCharacterRoles(character.Id);
+                                        break;
+                                    case "characteroverview":
+                                        character.CharacterOverview = await GetCharacterOverview(character.Id);
+                                        break;
+                                    case "roles":
+                                        character.Roles = await GetCharacterRoles(character.Id, string.Empty);
                                         break;
                                 }
                             }
-                        }
-
+                        } 
+                
                         characters.Add(character);
                     }
                 }
@@ -314,12 +338,13 @@ namespace ImpactApi.Services
                 }
             }
 
-            if (expand != null)
+            if (expand != string.Empty)
             {
                 parameters = expand.Split(",");
 
                 foreach (string parameter in parameters) 
                 {
+                    parameter.ToLower();
                     switch (parameter) 
                     {
                         case "talents":
@@ -330,7 +355,9 @@ namespace ImpactApi.Services
                             break;
                         case "overview":
                             character.CharacterOverview = await GetCharacterOverview(characterId);
-                            character.Roles = await GetCharacterRoles(characterId);
+                            break;
+                        case "roles":
+                            character.Roles = await GetCharacterRoles(characterId, string.Empty);
                             break;
                     }
                 }
@@ -418,9 +445,10 @@ namespace ImpactApi.Services
             return weapon;
         }
 
-        public async Task<List<Weapon>> GetAllWeapons(bool stats)
+        public async Task<List<Weapon>> GetAllWeapons(string expand)
         {
             List<Weapon> weapons = new List<Weapon>();
+            string[] parameters;
             string command = "SELECT * FROM ImpactDB.WeaponTable";
 
             using (MySqlConnection sqlConnection = new MySqlConnection(_connectionString))
@@ -433,16 +461,30 @@ namespace ImpactApi.Services
                             weapons.Add(ReadWeapon(sqlReader));
             }
 
-            if (stats)
-                foreach (Weapon weapon in weapons)
-                    weapon.Stats = await GetWeaponStats(weapon.Id);
+            if (expand != string.Empty)        
+            {    
+                parameters = expand.Split(",");
+
+                foreach (string parameter in parameters) 
+                {
+                    parameter.ToLower();
+                    switch (parameter)
+                    {
+                        case "stats":
+                            foreach (Weapon weapon in weapons)
+                                weapon.Stats = await GetWeaponStats(weapon.Id);
+                            break;
+                    }
+                }
+            }
 
             return weapons;
         }
 
-        public async Task<Weapon> GetWeapon(string id, bool stats)
+        public async Task<Weapon> GetWeapon(string id, string expand)
         {
             Weapon weapon;
+            string[] parameters;
             string command = "SELECT * FROM ImpactDB.WeaponTable WHERE (id = @id)";
 
             using (MySqlConnection sqlConnection = new MySqlConnection(_connectionString))
@@ -461,8 +503,22 @@ namespace ImpactApi.Services
                 }
             }
 
-            if (stats)
-                weapon.Stats = await GetWeaponStats(weapon.Id);
+
+            if (expand != string.Empty)        
+            {    
+                parameters = expand.Split(",");
+
+                foreach (string parameter in parameters) 
+                {
+                    parameter.ToLower();
+                    switch (parameter)
+                    {
+                        case "stats":
+                            weapon.Stats = await GetWeaponStats(weapon.Id);
+                            break;
+                    }
+                }
+            }
 
             return weapon;
         }
@@ -708,9 +764,10 @@ namespace ImpactApi.Services
         #endregion
 
         #region ArtifactPriority Operations
-        public async Task<List<ArtifactPriority>> GetArtifactPriorities(string characterId, bool details)
+        public async Task<List<ArtifactPriority>> GetArtifactPriorities(string characterId, string expand)
         {
             List<ArtifactPriority> artifactPriorities = new List<ArtifactPriority>();
+            string[] parameters;
             string command = "SELECT * FROM ImpactDB.ArtifactPriorityTable WHERE character_id = @character_id ORDER BY ArtifactPriorityTable.rank ASC";
 
             using (MySqlConnection sqlConnection = new MySqlConnection(_connectionString))
@@ -725,9 +782,34 @@ namespace ImpactApi.Services
                         while (await sqlReader.ReadAsync())
                             artifactPriorities.Add(ReadArtifactPriority(sqlReader));
 
-                    if (details)
-                        foreach (ArtifactPriority artifactPriority in artifactPriorities)
-                            artifactPriority.ArtifactSet = await GetArtifactSet(artifactPriority.ArtifactSetId);
+                    if (expand != string.Empty)        
+                    {    
+                        parameters = expand.Split(",");
+
+                        foreach (string parameter in parameters) 
+                        {
+                            parameter.ToLower();
+                            switch (parameter)
+                            {                                  
+                                case "artifactset":
+                                    foreach (ArtifactPriority artifactPriority in artifactPriorities)
+                                        artifactPriority.ArtifactSet = await GetArtifactSet(artifactPriority.ArtifactSetId);
+                                    break;
+                                case "artifact":
+                                    foreach (ArtifactPriority artifactPriority in artifactPriorities)
+                                        artifactPriority.ArtifactSet = await GetArtifactSet(artifactPriority.ArtifactSetId);
+                                    break;
+                                case "details":
+                                    foreach (ArtifactPriority artifactPriority in artifactPriorities)
+                                        artifactPriority.ArtifactSet = await GetArtifactSet(artifactPriority.ArtifactSetId);
+                                    break;
+                                case "set":
+                                    foreach (ArtifactPriority artifactPriority in artifactPriorities)
+                                        artifactPriority.ArtifactSet = await GetArtifactSet(artifactPriority.ArtifactSetId);
+                                    break;
+                            }
+                        }
+                    }
                 }
             }
 
@@ -749,9 +831,10 @@ namespace ImpactApi.Services
         #endregion
 
         #region WeaponPriority Operations
-        public async Task<List<WeaponPriority>> GetWeaponPriorities(string characterId, bool details)
+        public async Task<List<WeaponPriority>> GetWeaponPriorities(string characterId, string expand)
         {
             List<WeaponPriority> weaponPriorities = new List<WeaponPriority>();
+            string[] parameters;
             string command = "SELECT * FROM ImpactDB.WeaponPriorityTable WHERE character_id = @character_id ORDER BY WeaponPriorityTable.rank ASC";
 
             using (MySqlConnection sqlConnection = new MySqlConnection(_connectionString))
@@ -765,10 +848,23 @@ namespace ImpactApi.Services
                     using (DbDataReader sqlReader = await sqlCommand.ExecuteReaderAsync())
                         while (await sqlReader.ReadAsync())
                             weaponPriorities.Add(ReadWeaponPriority(sqlReader));
-                    
-                    if (details)
-                        foreach (WeaponPriority weaponPriority in weaponPriorities)
-                            weaponPriority.Weapon = await GetWeapon(weaponPriority.WeaponId, false);
+
+                    if (expand != string.Empty)        
+                    {    
+                        parameters = expand.Split(",");
+
+                        foreach (string parameter in parameters) 
+                        {
+                            parameter.ToLower();
+                            switch (parameter)
+                            {
+                                case "weapon":
+                                    foreach (WeaponPriority weaponPriority in weaponPriorities)
+                                        weaponPriority.Weapon = await GetWeapon(weaponPriority.WeaponId, string.Empty);
+                                    break;
+                            }
+                        }
+                    }
                 }
             }
 

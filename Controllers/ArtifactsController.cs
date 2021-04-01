@@ -45,7 +45,7 @@ namespace ImpactApi.Controllers
             }
         }
 
-        [HttpGet("{id}/artifact-set")]
+        [HttpGet("artifact-set/{setId}")]
         public async Task<ActionResult<ArtifactSet>> GetArtifactSet(string setId)
         {
             try
