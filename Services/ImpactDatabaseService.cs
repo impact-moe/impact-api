@@ -36,26 +36,24 @@ namespace ImpactApi.Services
 
             return artifact;
         }
-
-        private ArtifactSet ReadArtifactSet(DbDataReader sqlReader)
-        {
-            ArtifactSet artifactSet = new ArtifactSet();
-
-            artifactSet.Id = sqlReader["ArtifactSetTable.id"].ToString();
-            artifactSet.Name = sqlReader["ArtifactSetTable.name"].ToString();
-            artifactSet.MaxRarity = sqlReader.GetInt32("ArtifactSetTable.max_rarity");
-            artifactSet.TwoPieceBonus = sqlReader["ArtifactSetTable.two_piece_bonus"].ToString();
-            artifactSet.FourPieceBonus = sqlReader["ArtifactSetTable.four_piece_bonus"].ToString();
-
-            return artifactSet;
-        }
-        
         public async Task<List<Artifact>> GetAllArtifacts()
         {
             List<Artifact> artifacts = new List<Artifact>();
-            string command = "SELECT * FROM ImpactDB.ArtifactTable " +
-                "INNER JOIN ImpactDB.ArtifactSetTable " +
-                "ON ArtifactSetTable.id = ArtifactTable.artifact_set_id";
+            string command = "SELECT ArtifactTable.id AS 'ArtifactTable.id', " +
+                "ArtifactTable.name AS 'ArtifactTable.name', " +
+                "ArtifactTable.type AS 'ArtifactTable.type', " +
+                "ArtifactTable.rarity AS 'ArtifactTable.rarity', " +
+                "ArtifactTable.description AS 'ArtifactTable.description', " +
+                "ArtifactTable.image AS 'ArtifactTable.image', " +
+                "ArtifactTable.artifact_set_id AS 'ArtifactTable.artifact_set_id', " +
+                "ArtifactSetTable.id AS 'ArtifactSetTable.id', " +
+                "ArtifactSetTable.name AS 'ArtifactSetTable.name', " +
+                "ArtifactSetTable.max_rarity AS 'ArtifactSetTable.max_rarity', " +
+                "ArtifactSetTable.two_piece_bonus AS 'ArtifactSetTable.two_piece_bonus', " +
+                "ArtifactSetTable.four_piece_bonus AS 'ArtifactSetTable.four_piece_bonus' " +
+                "FROM ImpactDB.ArtifactTable " +
+                "JOIN ImpactDB.ArtifactSetTable " +
+                "ON ArtifactTable.artifact_set_id = ArtifactSetTable.id ";
 
             using (MySqlConnection sqlConnection = new MySqlConnection(_connectionString))
             {
@@ -471,6 +469,18 @@ namespace ImpactApi.Services
         #endregion
 
         #region ArtifactSet Operations
+        private ArtifactSet ReadArtifactSet(DbDataReader sqlReader)
+        {
+            ArtifactSet artifactSet = new ArtifactSet();
+
+            artifactSet.Id = sqlReader["ArtifactSetTable.id"].ToString();
+            artifactSet.Name = sqlReader["ArtifactSetTable.name"].ToString();
+            artifactSet.MaxRarity = sqlReader.GetInt32("ArtifactSetTable.max_rarity");
+            artifactSet.TwoPieceBonus = sqlReader["ArtifactSetTable.two_piece_bonus"].ToString();
+            artifactSet.FourPieceBonus = sqlReader["ArtifactSetTable.four_piece_bonus"].ToString();
+
+            return artifactSet;
+        }
         public async Task<List<ArtifactSet>> GetAllArtifactSets()
         {
             List<ArtifactSet> artifacts = new List<ArtifactSet>();
