@@ -1,0 +1,20 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Deploy API service
+      uses: appleboy/ssh-action@v0.1.4
+      with:
+        host: ${{secrets.SSH_HOST}}
+        key: ${{secrets.SSH_KEY}}
+        username: ${{secrets.SSH_USERNAME}}
+        port: ${{secrets.SSH_PORT}}
+        script: sh autoDeploy.sh api
