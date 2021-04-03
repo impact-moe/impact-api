@@ -1,4 +1,4 @@
-﻿namespace ImpactApi.Models
+﻿namespace ImpactApi.Settings
 {
     public class ImpactDatabaseSettings : IImpactDatabaseSettings
     {

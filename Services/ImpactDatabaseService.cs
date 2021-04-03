@@ -1,4 +1,5 @@
 ﻿using ImpactApi.Models;
+using ImpactApi.Settings;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 using System.Threading.Tasks;

@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using ImpactApi.Services;
-using ImpactApi.Models;
+using ImpactApi.Settings;
 
 namespace ImpactApi
 {
