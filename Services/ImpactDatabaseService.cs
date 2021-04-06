@@ -31,6 +31,8 @@ namespace ImpactApi.Services
             artifact.Name = sqlReader["ArtifactTable.name"].ToString();
             artifact.Type = sqlReader["ArtifactTable.type"].ToString();
             artifact.Description = sqlReader["ArtifactTable.description"].ToString();
+            artifact.Lore = sqlReader["ArtifactTable.lore"].ToString();
+            artifact.Location = sqlReader["ArtifactTable.location"].ToString();
             artifact.Image = sqlReader["ArtifactTable.image"].ToString();
 
             artifact.ArtifactSet = ReadArtifactSet(sqlReader);
