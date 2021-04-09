@@ -23,10 +23,7 @@ namespace ImpactApi.Controllers
         {
             try
             {
-                Weapon weaponObj = await _databaseService.GetWeapon(id, expand);
-                if (weaponObj != null)
-                    return weaponObj;
-                return NotFound();
+                return await _databaseService.GetWeapon(id, expand);
             }
             catch (Exception e)
             {
@@ -40,9 +37,9 @@ namespace ImpactApi.Controllers
             try
             {
                 List<WeaponStat> weaponStats = await _databaseService.GetWeaponStats(id);
-                if (weaponStats != null)
+                if (weaponStats.Count != 0)
                     return weaponStats;
-                return NotFound();
+                return NoContent();
             }
             catch (Exception e)
             {

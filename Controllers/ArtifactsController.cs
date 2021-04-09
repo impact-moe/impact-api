@@ -25,7 +25,7 @@ namespace ImpactApi.Controllers
                 Artifact artifact = await _databaseService.GetArtifact(id);
                 if (artifact != null)
                     return artifact;
-                return NotFound();
+                return NoContent();
             }
             catch (Exception e) {
                 return StatusCode(500, e);
@@ -53,7 +53,7 @@ namespace ImpactApi.Controllers
                 ArtifactSet artifactSet = await _databaseService.GetArtifactSet(setId);
                 if (artifactSet != null)
                     return artifactSet;
-                return NotFound();
+                return NoContent();
             }
             catch (Exception e)
             {

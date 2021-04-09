@@ -26,7 +26,7 @@ namespace ImpactApi.Controllers
                 Character character = await _databaseService.GetCharacter(id, expand);
                 if (character != null)
                     return character;
-                return NotFound();
+                return NoContent();
             }
             catch (Exception e)
             {
@@ -42,7 +42,7 @@ namespace ImpactApi.Controllers
                 Character character = await _databaseService.GetCharacter(id, "talents,constellations,overview");
                 if (character != null)
                     return character;
-                return NotFound();
+                return NoContent();
             }
             catch (Exception e)
             {
@@ -56,9 +56,9 @@ namespace ImpactApi.Controllers
             try
             {
                 List<Talent> talents = await _databaseService.GetTalents(id);
-                if (talents != null)
+                if (talents.Count != 0)
                     return talents;
-                return NotFound();
+                return NoContent();
             }
             catch (Exception e)
             {
@@ -72,9 +72,9 @@ namespace ImpactApi.Controllers
             try
             {
                 List<Constellation> constellations = await _databaseService.GetConstellations(id);
-                if (constellations != null)
+                if (constellations.Count != 0)
                     return constellations;
-                return NotFound();
+                return NoContent();
             }
             catch (Exception e)
             {
@@ -88,9 +88,9 @@ namespace ImpactApi.Controllers
             try
             {
                 CharacterOverview overview = await _databaseService.GetCharacterOverview(id);
-                if (overview != null)
+                if (overview.RecommendedRole != string.Empty)
                     return overview;
-                return NotFound();
+                return NoContent();
             }
             catch (Exception e)
             {
@@ -104,9 +104,9 @@ namespace ImpactApi.Controllers
             try
             {
                 List<Role> roles = await _databaseService.GetCharacterRoles(id, expand);
-                if (roles != null)
+                if (roles.Count != 0)
                     return roles;
-                return NotFound();
+                return NoContent();
             }
             catch (Exception e)
             {
@@ -120,9 +120,9 @@ namespace ImpactApi.Controllers
             try
             {
                 List<WeaponPriority> weaponPriorities = await _databaseService.GetWeaponPriorities(id, expand);
-                if (weaponPriorities != null)
+                if (weaponPriorities.Count != 0)
                     return weaponPriorities;
-                return NotFound();
+                return NoContent();
             }
             catch (Exception e)
             {
@@ -136,9 +136,9 @@ namespace ImpactApi.Controllers
             try
             {
                 List<ArtifactPriority> artifactPriorities = await _databaseService.GetArtifactPriorities(id, expand);
-                if (artifactPriorities != null)
+                if (artifactPriorities.Count != 0)
                     return artifactPriorities;
-                return NotFound();
+                return NoContent();
             }
             catch (Exception e)
             {
@@ -152,9 +152,9 @@ namespace ImpactApi.Controllers
             try
             {
                 List<MainStatPriority> mainStatPriorities = await _databaseService.GetMainStatPriorities(id);
-                if (mainStatPriorities != null)
+                if (mainStatPriorities.Count != 0)
                     return mainStatPriorities;
-                return NotFound();
+                return NoContent();
             }
             catch (Exception e)
             {
@@ -168,9 +168,9 @@ namespace ImpactApi.Controllers
             try
             {
                 List<SubStatPriority> subStatPriorities = await _databaseService.GetSubStatPriorities(id);
-                if (subStatPriorities != null)
+                if (subStatPriorities.Count != 0)
                     return subStatPriorities;
-                return NotFound();
+                return NoContent();
             }
             catch (Exception e)
             {
