@@ -993,7 +993,7 @@ namespace ImpactApi.Services
             weaponStat.WeaponId = sqlReader["weapon_id"].ToString();
             weaponStat.Level = sqlReader["level"].ToString();
             weaponStat.BaseAtk = sqlReader.GetInt32("base_atk");
-            weaponStat.Substat = sqlReader.GetFloat("sub_stat");
+            weaponStat.SubStat = sqlReader.GetFloat("sub_stat");
 
             return weaponStat;
         }

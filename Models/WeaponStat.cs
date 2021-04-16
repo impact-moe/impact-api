@@ -6,6 +6,6 @@
         public string WeaponId { get; set; }
         public string Level { get; set; }
         public int BaseAtk { get; set; }
-        public float Substat { get; set; }
+        public float SubStat { get; set; }
     }
 }
