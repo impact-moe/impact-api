@@ -46,9 +46,11 @@ namespace ImpactApi.Services
                 "ArtifactTable.name AS 'ArtifactTable.name', " +
                 "ArtifactTable.type AS 'ArtifactTable.type', " +
                 "ArtifactTable.rarity AS 'ArtifactTable.rarity', " +
-                "ArtifactTable.description AS 'ArtifactTable.description', " +
-                "ArtifactTable.image AS 'ArtifactTable.image', " +
                 "ArtifactTable.artifact_set_id AS 'ArtifactTable.artifact_set_id', " +
+                "ArtifactTable.description AS 'ArtifactTable.description', " +
+                "ArtifactTable.lore AS 'ArtifactTable.lore', " +
+                "ArtifactTable.location AS 'ArtifactTable.location', " +
+                "ArtifactTable.image AS 'ArtifactTable.image', " +
                 "ArtifactSetTable.id AS 'ArtifactSetTable.id', " +
                 "ArtifactSetTable.name AS 'ArtifactSetTable.name', " +
                 "ArtifactSetTable.max_rarity AS 'ArtifactSetTable.max_rarity', " +
@@ -77,9 +79,11 @@ namespace ImpactApi.Services
                 "ArtifactTable.name AS 'ArtifactTable.name', " +
                 "ArtifactTable.type AS 'ArtifactTable.type', " +
                 "ArtifactTable.rarity AS 'ArtifactTable.rarity', " +
-                "ArtifactTable.description AS 'ArtifactTable.description', " +
-                "ArtifactTable.image AS 'ArtifactTable.image', " +
                 "ArtifactTable.artifact_set_id AS 'ArtifactTable.artifact_set_id', " +
+                "ArtifactTable.description AS 'ArtifactTable.description', " +
+                "ArtifactTable.lore AS 'ArtifactTable.lore', " +
+                "ArtifactTable.location AS 'ArtifactTable.location', " +
+                "ArtifactTable.image AS 'ArtifactTable.image', " +
                 "ArtifactSetTable.id AS 'ArtifactSetTable.id', " +
                 "ArtifactSetTable.name AS 'ArtifactSetTable.name', " +
                 "ArtifactSetTable.max_rarity AS 'ArtifactSetTable.max_rarity', " +
