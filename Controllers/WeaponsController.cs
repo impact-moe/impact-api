@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ImpactApi.Models;
@@ -21,56 +20,28 @@ namespace ImpactApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Weapon>> Get(string id, string expand = "")
         {
-            try
-            {
-                return await _databaseService.GetWeapon(id, expand);
-            }
-            catch (Exception e)
-            {
-                return StatusCode(500, e.ToString());
-            }
+            return await _databaseService.GetWeapon(id, expand);
         }
 
         [HttpGet("{id}/stats")]
         public async Task<ActionResult<List<WeaponStat>>> GetWeaponStats(string id)
         {
-            try
-            {
-                List<WeaponStat> weaponStats = await _databaseService.GetWeaponStats(id);
-                if (weaponStats.Count != 0)
-                    return weaponStats;
-                return NoContent();
-            }
-            catch (Exception e)
-            {
-                return StatusCode(500, e.ToString());
-            }
+            List<WeaponStat> weaponStats = await _databaseService.GetWeaponStats(id);
+            if (weaponStats.Count != 0)
+                return weaponStats;
+            return NoContent();
         }
 
         [HttpGet]
         public async Task<ActionResult<List<Weapon>>> GetAllWeapons(string expand = "")
         {
-            try
-            {
-                return await _databaseService.GetAllWeapons(expand);
-            }
-            catch (Exception e)
-            {
-                return StatusCode(500, e.ToString());
-            }
+            return await _databaseService.GetAllWeapons(expand);
         }
 
         [HttpGet("{id}/all")]
         public async Task<ActionResult<Weapon>> GetAllWeaponStats(string id)
         {
-            try
-            {
-                return await _databaseService.GetWeapon(id, "stats");
-            }
-            catch (Exception e)
-            {
-                return StatusCode(500, e.ToString());
-            }
+            return await _databaseService.GetWeapon(id, "stats");
         }
     }
 }
