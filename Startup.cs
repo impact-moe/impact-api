@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using ImpactApi.Services;
 using ImpactApi.Settings;
+using Microsoft.Extensions.Hosting;
 
 namespace ImpactApi
 {
@@ -32,6 +33,15 @@ namespace ImpactApi
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/error");
+            }
+
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>

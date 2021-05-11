@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ImpactApi.Models;
@@ -21,44 +20,25 @@ namespace ImpactApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Artifact>> GetArtifact(string id)
         {
-            try {
-                Artifact artifact = await _databaseService.GetArtifact(id);
-                if (artifact != null)
-                    return artifact;
-                return NoContent();
-            }
-            catch (Exception e) {
-                return StatusCode(500, e);
-            }
+            Artifact artifact = await _databaseService.GetArtifact(id);
+            if (artifact != null)
+                return artifact;
+            return NoContent();
         }
 
         [HttpGet]
         public async Task<ActionResult<List<Artifact>>> GetAllArtifacts()
         {
-            try
-            {
-                return await _databaseService.GetAllArtifacts();
-            }
-            catch (Exception e)
-            {
-                return StatusCode(500, e.ToString());
-            }
+            return await _databaseService.GetAllArtifacts();
         }
 
         [HttpGet("artifact-set/{setId}")]
         public async Task<ActionResult<ArtifactSet>> GetArtifactSet(string setId)
         {
-            try
-            {
-                ArtifactSet artifactSet = await _databaseService.GetArtifactSet(setId);
-                if (artifactSet != null)
-                    return artifactSet;
-                return NoContent();
-            }
-            catch (Exception e)
-            {
-                return StatusCode(500, e.ToString());
-            }
+            ArtifactSet artifactSet = await _databaseService.GetArtifactSet(setId);
+            if (artifactSet != null)
+                return artifactSet;
+            return NoContent();
         }
     }
 }
