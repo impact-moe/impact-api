@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Data.Common;
 using System.Data;
+using System;
 
 namespace ImpactApi.Services
 {
@@ -379,7 +380,7 @@ namespace ImpactApi.Services
             
             character.Id = row["id"].ToString();
             character.Name = row["name"].ToString();
-            character.Rarity = row["rarity"].ToString();
+            character.Rarity = Convert.ToInt32(row["rarity"]);
             character.Weapon = row["weapon"].ToString();
             character.Element = row["element"].ToString();
             character.Region = row["region"].ToString();
@@ -407,7 +408,7 @@ namespace ImpactApi.Services
 
             character.Id = sqlReader["id"].ToString();
             character.Name = sqlReader["name"].ToString();
-            character.Rarity = sqlReader["rarity"].ToString();
+            character.Rarity = sqlReader.GetInt32("rarity");
             character.Weapon = sqlReader["weapon"].ToString();
             character.Element = sqlReader["element"].ToString();
             character.Region = sqlReader["region"].ToString();
