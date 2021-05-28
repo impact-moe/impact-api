@@ -1,6 +1,6 @@
-﻿namespace ImpactApi.Models
+﻿namespace ImpactApi.Entities
 {
-    public class Faction
+    public partial class Faction
     {
         public string Id { get; set; }
         public string Name { get; set; }

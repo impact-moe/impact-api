@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ImpactApi.Migrations
 {
-    [DbContext(typeof(UserDbContext))]
+    [DbContext(typeof(ImpactDbContext))]
     partial class UserDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

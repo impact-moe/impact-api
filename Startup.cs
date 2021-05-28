@@ -48,25 +48,20 @@ namespace ImpactApi
                     .AllowCredentials());
             });
 
-            var impactDatabaseSettings = Configuration.GetSection(nameof(ImpactDatabaseSettings));
-            var userDatabaseSettings = Configuration.GetSection(nameof(UserDatabaseSettings));
+            var databaseSettings = Configuration.GetSection(nameof(DatabaseSettings));
             var jwtSettings = Configuration.GetSection(nameof(JwtSettings));
 
-            services.Configure<ImpactDatabaseSettings>(Configuration.GetSection(nameof(ImpactDatabaseSettings)));
             services.Configure<JwtSettings>(Configuration.GetSection(nameof(JwtSettings)));
 
-            services.AddSingleton<ImpactDatabaseSettings>(sp => sp.GetRequiredService<IOptions<ImpactDatabaseSettings>>().Value);
             services.AddSingleton<JwtSettings>(sp => sp.GetRequiredService<IOptions<JwtSettings>>().Value);
 
-            services.AddSingleton<ImpactDatabaseService>();
+            string connectionString = "Host=" + databaseSettings.GetSection("Host").Value + ";" +
+                "Port=" + databaseSettings.GetSection("Port").Value + ";" +
+                "Database=" + databaseSettings.GetSection("Database").Value + ";" +
+                "Uid=" + databaseSettings.GetSection("Uid").Value + ";" +
+                "Password=" + databaseSettings.GetSection("Password").Value + ";";
 
-            string connectionString = "Host=" + userDatabaseSettings.GetSection("Host").Value + ";" +
-                "Port=" + userDatabaseSettings.GetSection("Port").Value + ";" +
-                "Database=" + userDatabaseSettings.GetSection("Database").Value + ";" +
-                "Uid=" + userDatabaseSettings.GetSection("Uid").Value + ";" +
-                "Password=" + userDatabaseSettings.GetSection("Password").Value + ";";
-
-            services.AddDbContext<UserDbContext>(options =>
+            services.AddDbContext<ImpactDbContext>(options =>
             {
                 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
             });
@@ -75,7 +70,7 @@ namespace ImpactApi
             {
                 opt.User.RequireUniqueEmail = true;
             })
-            .AddEntityFrameworkStores<UserDbContext>()
+            .AddEntityFrameworkStores<ImpactDbContext>()
             .AddDefaultTokenProviders();
 
             services.Configure<DataProtectionTokenProviderOptions>(opt =>
@@ -102,7 +97,9 @@ namespace ImpactApi
 
             services.AddScoped<JwtService>();
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(
+                options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
