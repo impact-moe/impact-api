@@ -1,6 +1,6 @@
 ﻿namespace ImpactApi.Settings
 {
-    public class ImpactDatabaseSettings
+    public class UserDatabaseSettings
     {
         public string Host { get; set; }
         public string Port { get; set; }

@@ -13,7 +13,7 @@ namespace ImpactApi.Services
     {
         string _connectionString;
 
-        public ImpactDatabaseService(IImpactDatabaseSettings impactDatabaseSettings)
+        public ImpactDatabaseService(ImpactDatabaseSettings impactDatabaseSettings)
         {
             _connectionString = "Host=" + impactDatabaseSettings.Host + ";" +
                 "Port=" + impactDatabaseSettings.Port + ";" +
