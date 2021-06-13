@@ -1,18 +1,10 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace ImpactApi.Entities
 {
     public partial class Character
     {
-        public Character()
-        {
-            ArtifactPriorities = new HashSet<ArtifactPriority>();
-            MainStatPriorities = new HashSet<MainStatPriority>();
-            Roles = new HashSet<Role>();
-            SubStatPriorities = new HashSet<SubStatPriority>();
-            WeaponPriorities = new HashSet<WeaponPriority>();
-        }
-
         public string Id { get; set; }
         public string Name { get; set; }
         public string Tier { get; set; }
@@ -34,10 +26,21 @@ namespace ImpactApi.Entities
         public string EnglishVa { get; set; }
         public string KoreanVa { get; set; }
 
-        public virtual ICollection<ArtifactPriority> ArtifactPriorities { get; set; }
-        public virtual ICollection<MainStatPriority> MainStatPriorities { get; set; }
-        public virtual ICollection<Role> Roles { get; set; }
-        public virtual ICollection<SubStatPriority> SubStatPriorities { get; set; }
-        public virtual ICollection<WeaponPriority> WeaponPriorities { get; set; }
+        public virtual ICollection<Talent> Talents { get; set; } = new List<Talent>();
+        public virtual ICollection<Constellation> Constellations { get; set; } = new List<Constellation>();
+        public virtual ICollection<Role> Roles { get; set; } = new List<Role>();
+        public virtual CharacterOverview CharacterOverview { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<ArtifactPriority> ArtifactPriorities { get; set; } = new List<ArtifactPriority>();
+        
+        [JsonIgnore]
+        public virtual ICollection<MainStatPriority> MainStatPriorities { get; set; } = new List<MainStatPriority>();
+
+        [JsonIgnore]
+        public virtual ICollection<SubStatPriority> SubStatPriorities { get; set; } = new List<SubStatPriority>();
+
+        [JsonIgnore]
+        public virtual ICollection<WeaponPriority> WeaponPriorities { get; set; } = new List<WeaponPriority>();
     }
 }

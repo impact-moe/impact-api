@@ -10,7 +10,7 @@ namespace ImpactApi.Controllers
     [Route("api/[controller]")]
     public class ArtifactsController : ControllerBase
     {
-        ImpactDbContext _dbContext;
+        private readonly ImpactDbContext _dbContext;
 
         public ArtifactsController(ImpactDbContext dbContext)
         {
@@ -18,31 +18,38 @@ namespace ImpactApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Artifact>> GetArtifact(int id)
+        public async Task<ActionResult<Artifact>> GetArtifact(int id, string expand)
         {
-            Artifact artifact = await this._dbContext.Artifacts.FindAsync(id);
+            Artifact artifact = await _dbContext.Artifacts.FindAsync(id);
 
-            if (artifact != null)
-                return artifact;
+            if (artifact == null)
+                return NoContent();
 
-            return NoContent();
+            if (expand != null)
+            {
+                expand = expand.ToLower();
+                if (expand == "artifact-set")
+                    await _dbContext.Entry(artifact).Reference(o => o.ArtifactSet).LoadAsync();
+            }
+
+            return artifact;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<Artifact>>> GetAllArtifacts()
         {
-            return await this._dbContext.Artifacts.Include(o => o.ArtifactSet).ToListAsync();
+            return await _dbContext.Artifacts.Include(o => o.ArtifactSet).ToListAsync();
         }
 
         [HttpGet("artifact-set/{setId}")]
         public async Task<ActionResult<ArtifactSet>> GetArtifactSet(string setId)
         {
-            ArtifactSet artifactSet = await this._dbContext.ArtifactSets.FindAsync(setId);
+            ArtifactSet artifactSet = await _dbContext.ArtifactSets.FindAsync(setId);
 
-            if (artifactSet != null)
-                return artifactSet;
+            if (artifactSet == null)
+                return NoContent();
                 
-            return NoContent();
+            return artifactSet;
         }
     }
 }

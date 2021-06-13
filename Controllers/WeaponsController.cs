@@ -11,7 +11,7 @@ namespace ImpactApi.Controllers
     [Route("api/[controller]")]
     public class WeaponsController : ControllerBase
     {
-        ImpactDbContext _dbContext;
+        private readonly ImpactDbContext _dbContext;
 
         public WeaponsController(ImpactDbContext dbContext)
         {
@@ -19,14 +19,21 @@ namespace ImpactApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Weapon>> Get(string id)
+        public async Task<ActionResult<Weapon>> Get(string id, string expand)
         {
             Weapon weapon = await _dbContext.Weapons.FindAsync(id);
 
-            if (weapon != null)
-                return weapon;
+            if (weapon == null)
+                return NoContent();
 
-            return NoContent();
+            if (expand != null)
+            {
+                expand.ToLower();
+                if (expand == "weaponstats" || expand == "weapon-stats" || expand == "stats")
+                    await _dbContext.Entry(weapon).Collection(o => o.WeaponStats).LoadAsync();
+            }
+
+            return weapon;
         }
 
         [HttpGet("{id}/stats")]
@@ -34,15 +41,22 @@ namespace ImpactApi.Controllers
         {
             List<WeaponStat> weaponStats = await _dbContext.WeaponStats.Where(o => o.WeaponId == id).ToListAsync();
 
-            if (weaponStats.Count != 0)
-                return weaponStats;
+            if (weaponStats.Count == 0)
+                return NoContent();
                 
-            return NoContent();
+            return weaponStats;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Weapon>>> GetAllWeapons()
+        public async Task<ActionResult<List<Weapon>>> GetAllWeapons(string expand)
         {
+            if (expand != null)
+            {
+                expand = expand.ToLower();
+                if (expand == "weaponstats" || expand == "weapon-stats" || expand == "stats")
+                    await _dbContext.Weapons.Include(o => o.WeaponStats).ToListAsync();
+            }
+            
             return await _dbContext.Weapons.ToListAsync();
         }
 

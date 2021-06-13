@@ -26,7 +26,7 @@ namespace ImpactApi.Entities
         public virtual DbSet<Food> Foods { get; set; }
         public virtual DbSet<MainStatPriority> MainStatPriorities { get; set; }
         public virtual DbSet<Region> Regions { get; set; }
-        public virtual DbSet<Role> RoleNotes { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<SubStatPriority> SubStatPriorities { get; set; }
         public virtual DbSet<Talent> Talents { get; set; }
         public virtual DbSet<WeaponPriority> WeaponPriorities { get; set; }
@@ -135,6 +135,8 @@ namespace ImpactApi.Entities
 
                 entity.Property(e => e.Rank).HasColumnName("rank");
 
+                entity.Property(e => e.RoleId).HasColumnName("role_id");
+
                 entity.HasOne(d => d.ArtifactSet)
                     .WithMany(p => p.ArtifactPriorities)
                     .HasForeignKey(d => d.ArtifactSetId)
@@ -145,6 +147,7 @@ namespace ImpactApi.Entities
                     .HasForeignKey(d => d.CharacterId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Character-ArtifactPriority");
+
             });
 
             modelBuilder.Entity<ArtifactSet>(entity =>
@@ -233,7 +236,7 @@ namespace ImpactApi.Entities
 
                 entity.Property(e => e.RecommendedRole)
                     .HasMaxLength(45)
-                    .HasColumnName("recommended_role");
+                    .HasColumnName("recommended_role");           
             });
 
             modelBuilder.Entity<Character>(entity =>
@@ -323,6 +326,10 @@ namespace ImpactApi.Entities
                 entity.Property(e => e.Weapon)
                     .HasMaxLength(45)
                     .HasColumnName("weapon");
+
+                entity.HasOne<CharacterOverview>(d => d.CharacterOverview)
+                    .WithOne(p => p.Character)
+                    .HasForeignKey<CharacterOverview>(d => d.CharacterId);
             });
 
             modelBuilder.Entity<Constellation>(entity =>
@@ -348,6 +355,11 @@ namespace ImpactApi.Entities
                     .HasColumnName("name");
 
                 entity.Property(e => e.Order).HasColumnName("order");
+
+                entity.HasOne<Character>(d => d.Character)
+                    .WithMany(p => p.Constellations)
+                    .HasForeignKey(d => d.CharacterId)
+                    .HasConstraintName("Character-Constellation");
             });
 
             modelBuilder.Entity<Faction>(entity =>
@@ -434,6 +446,8 @@ namespace ImpactApi.Entities
                     .HasMaxLength(255)
                     .HasColumnName("type");
 
+                entity.Property(e => e.RoleId).HasColumnName("role_id");
+
                 entity.HasOne(d => d.Character)
                     .WithMany(p => p.MainStatPriorities)
                     .HasForeignKey(d => d.CharacterId)
@@ -471,7 +485,9 @@ namespace ImpactApi.Entities
 
                 entity.HasIndex(e => e.CharacterId, "character-rolenotes_idx");
 
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.Id)
+                    .HasMaxLength(45)
+                    .HasColumnName("id");
 
                 entity.Property(e => e.CharacterId)
                     .IsRequired()
@@ -493,6 +509,7 @@ namespace ImpactApi.Entities
                     .HasForeignKey(d => d.CharacterId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("character-rolenotes");
+
             });
 
             modelBuilder.Entity<SubStatPriority>(entity =>
@@ -514,6 +531,8 @@ namespace ImpactApi.Entities
                 entity.Property(e => e.Type)
                     .HasMaxLength(255)
                     .HasColumnName("type");
+                
+                entity.Property(e => e.RoleId).HasColumnName("role_id");
 
                 entity.HasOne(d => d.Character)
                     .WithMany(p => p.SubStatPriorities)
@@ -547,6 +566,11 @@ namespace ImpactApi.Entities
                 entity.Property(e => e.Type)
                     .HasMaxLength(24)
                     .HasColumnName("type");
+
+                entity.HasOne<Character>(d => d.Character)
+                    .WithMany(p => p.Talents)
+                    .HasForeignKey(d => d.CharacterId)
+                    .HasConstraintName("Character-Talent");
             });
 
             modelBuilder.Entity<WeaponPriority>(entity =>
@@ -568,6 +592,8 @@ namespace ImpactApi.Entities
                 entity.Property(e => e.Rank).HasColumnName("rank");
 
                 entity.Property(e => e.WeaponId).HasColumnName("weapon_id");
+
+                entity.Property(e => e.RoleId).HasColumnName("role_id");
 
                 entity.HasOne(d => d.Character)
                     .WithMany(p => p.WeaponPriorities)

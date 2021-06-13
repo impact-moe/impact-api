@@ -5,12 +5,6 @@ namespace ImpactApi.Entities
 {
     public partial class Weapon
     {
-        public Weapon()
-        {
-            WeaponPriorities = new HashSet<WeaponPriority>();
-            WeaponStats = new HashSet<WeaponStat>();
-        }
-
         public string Id { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }
@@ -25,9 +19,9 @@ namespace ImpactApi.Entities
         public string Image { get; set; }
         public string Location { get; set; }
 
-        public virtual ICollection<WeaponStat> WeaponStats { get; set; }
+        public virtual ICollection<WeaponStat> WeaponStats { get; set; } = new List<WeaponStat>();
         
         [JsonIgnore]
-        public virtual ICollection<WeaponPriority> WeaponPriorities { get; set; }
+        public virtual ICollection<WeaponPriority> WeaponPriorities { get; set; } = new List<WeaponPriority>();
     }
 }

@@ -9,6 +9,10 @@ namespace ImpactApi.Entities
         public string Type { get; set; }
         public string CharacterId { get; set; }
         public string CharacterRole { get; set; }
+        public string RoleId { get; set; }
+
+        [JsonIgnore]
+        public virtual Role Role { get; set; }
         
         [JsonIgnore]
         public virtual Character Character { get; set; }
