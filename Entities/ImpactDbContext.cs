@@ -255,7 +255,7 @@ namespace ImpactApi.Entities
                     .HasMaxLength(45)
                     .HasColumnName("birthday");
 
-                entity.Property(e => e.ChineseVa)
+                entity.Property(e => e.ChineseVA)
                     .HasMaxLength(100)
                     .HasColumnName("chinese_va");
 
@@ -271,7 +271,7 @@ namespace ImpactApi.Entities
                     .HasMaxLength(45)
                     .HasColumnName("element");
 
-                entity.Property(e => e.EnglishVa)
+                entity.Property(e => e.EnglishVA)
                     .HasMaxLength(100)
                     .HasColumnName("english_va");
 
@@ -287,11 +287,11 @@ namespace ImpactApi.Entities
                     .HasMaxLength(100)
                     .HasColumnName("image");
 
-                entity.Property(e => e.JapaneseVa)
+                entity.Property(e => e.JapaneseVA)
                     .HasMaxLength(100)
                     .HasColumnName("japanese_va");
 
-                entity.Property(e => e.KoreanVa)
+                entity.Property(e => e.KoreanVA)
                     .HasMaxLength(100)
                     .HasColumnName("korean_va");
 

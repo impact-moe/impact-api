@@ -21,10 +21,10 @@ namespace ImpactApi.Entities
         public string Faction { get; set; }
         public string Birthday { get; set; }
         public string Constellation { get; set; }
-        public string ChineseVa { get; set; }
-        public string JapaneseVa { get; set; }
-        public string EnglishVa { get; set; }
-        public string KoreanVa { get; set; }
+        public string ChineseVA { get; set; }
+        public string JapaneseVA { get; set; }
+        public string EnglishVA { get; set; }
+        public string KoreanVA { get; set; }
 
         public virtual ICollection<Talent> Talents { get; set; } = new List<Talent>();
         public virtual ICollection<Constellation> Constellations { get; set; } = new List<Constellation>();
