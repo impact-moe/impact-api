@@ -17,4 +17,3 @@ This API partially gathered data from the following sources:
 ## Licensing
 
 This API is distributed under the GNU General Public License v3.0 license. Read [`LICENSE`](https://github.com/impact-moe/impact-api/blob/master/LICENSE) for more information.
-
